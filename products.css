@@ -1,0 +1,146 @@
+.product-table-container {
+    overflow-x: auto;
+    margin: 20px 0;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    min-width: 600px; /* Minimum width to maintain readability */
+}
+
+.product-table th {
+    background-color: #2c3e50;
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.product-table td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.product-table tr:nth-child(even) {
+    background-color: #f5f5f5;
+}
+
+.product-table tr:hover {
+    background-color: #f0f0f0;
+}
+
+.add-to-cart {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 14px; /* Better for mobile */
+    white-space: nowrap; /* Prevent button text wrapping */
+}
+
+.add-to-cart:hover {
+    background-color: #2980b9;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .product-table {
+        font-size: 14px; /* Smaller font for mobile */
+    }
+    
+    .product-table th,
+    .product-table td {
+        padding: 8px 10px; /* Reduced padding for mobile */
+    }
+    
+    .add-to-cart {
+        padding: 6px 10px; /* Smaller button for mobile */
+    }
+}
+
+@media (max-width: 576px) {
+    .product-table {
+        min-width: 100%; /* Allow table to shrink more on very small screens */
+    }
+    
+    .product-table th,
+    .product-table td {
+        padding: 6px 8px; /* Even more compact */
+        font-size: 13px; /* Smaller text for very small screens */
+    }
+    
+    /* Stacked layout for very small screens */
+    .product-table-container {
+        overflow-x: visible; /* Disable horizontal scrolling */
+    }
+    
+    .product-table {
+        display: block;
+        min-width: 0;
+    }
+    
+    .product-table thead {
+        display: none; /* Hide headers in stacked layout */
+    }
+    
+    .product-table tbody {
+        display: block;
+    }
+    
+    .product-table tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        background-color: white;
+    }
+    
+    .product-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 10px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .product-table td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        margin-right: 10px;
+        color: #2c3e50;
+    }
+    
+    .product-table td:last-child {
+        border-bottom: none;
+    }
+    
+    /* Add this to your HTML for each td: data-label="Column Name" */
+}
+
+.menu-toggle {
+  font-size: 24px;
+  color: #fff;
+  background-color: #18375d; /* Dark blue for visibility */
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+}
+
+.menu-toggle:hover {
+  background-color: #1f4c81;
+}
+
+.menu-toggle:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(24, 55, 93, 0.4);
+}

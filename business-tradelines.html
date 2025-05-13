@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRADELINES - Business Tradelines</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="products.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1><a href="index.html"> TRADELINES </a></h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="products.html" class="active">Shop</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="header-icons">
+                <a href="cart.html" class="cart-link">
+                    <div class="cart-icon">
+                      <i class="fas fa-shopping-cart"></i>
+                      <span class="cart-count">0</span>
+                    </div>
+                  </a>
+                <a href="auth.html" class="user-icon"><i class="fas fa-user"></i></a>
+            </div>
+            <button class="menu-toggle">☰</button>
+<script>
+document.querySelector('.menu-toggle').addEventListener('click', function() {
+    document.querySelector('.main-nav').classList.toggle('active');
+});
+</script>
+        </div>
+    </header>
+
+    <!-- Product Listing Section -->
+<main class="product-listing">
+    <div class="container">
+        <div class="listing-header">
+            <h1>BUSINESS TRADELINES</h1>
+        </div>
+
+        <!-- Primary Tradelines -->
+<section class="category-section" data-category="electronics">
+    <div class="product-table-container">
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>VENDOR</th>
+                    <th>ACCOUNT TYPE</th>
+                    <th>CREDIT LIMIT</th>
+                    <th>YEAR</th>
+                    <th>DISCOUNTED PRICE</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="product-item">
+                    <td data-label="ID">001</td>
+                    <td data-label="VENDOR">NAV</td>
+                    <td data-label="ACCOUNT TYPE">Term Loan</td>
+                    <td data-label="CREDIT LIMIT">$91,354</td>
+                    <td data-label="YEAR">3.2</td>
+                    <td data-label="DISCOUNTED PRICE">$1,060.02</td>
+                    <td><button class="add-to-cart" data-id="1">Add to Cart</button></td>
+                </tr>
+                <tr class="product-item">
+                    <td data-label="ID">002</td>
+                    <td data-label="VENDOR">Shirtsy</td>
+                    <td data-label="ACCOUNT TYPE">Business Line</td>
+                    <td data-label="CREDIT LIMIT">$52,731</td>
+                    <td data-label="YEAR">4.7</td>
+                    <td data-label="DISCOUNTED PRICE">$701.73</td>
+                    <td><button class="add-to-cart" data-id="2">Add to Cart</button></td>
+                </tr>
+                <tr class="product-item">
+                    <td data-label="ID">003</td>
+                    <td data-label="VENDOR">Supply Work</td>
+                    <td data-label="ACCOUNT TYPE">Commercial</td>
+                    <td data-label="CREDIT LIMIT">$37,272</td>
+                    <td data-label="YEAR">1.8</td>
+                    <td data-label="DISCOUNTED PRICE">$448.06</td>
+                    <td><button class="add-to-cart" data-id="3">Add to Cart</button></td>
+                </tr>
+                <tr class="product-item">
+                    <td data-label="ID">004</td>
+                    <td data-label="VENDOR">Grainger</td>
+                    <td data-label="ACCOUNT TYPE">Vendor Credit</td>
+                    <td data-label="CREDIT LIMIT">$57,591</td>
+                    <td data-label="YEAR">2.4</td>
+                    <td data-label="DISCOUNTED PRICE">$680.31</td>
+                    <td><button class="add-to-cart" data-id="4">Add to Cart</button></td>
+                </tr>
+                <tr class="product-item">
+                    <td data-label="ID">005</td>
+                    <td data-label="VENDOR">NAV</td>
+                    <td data-label="ACCOUNT TYPE">Vendor Credit</td>
+                    <td data-label="CREDIT LIMIT">$33,566</td>
+                    <td data-label="YEAR">2.2</td>
+                    <td data-label="DISCOUNTED PRICE">$421.74</td>
+                    <td><button class="add-to-cart" data-id="5">Add to Cart</button></td>
+                </tr>
+                <tr class="product-item">
+                    <td data-label="ID">006</td>
+                    <td data-label="VENDOR">Marathon</td>
+                    <td data-label="ACCOUNT TYPE">Business Credit</td>
+                    <td data-label="CREDIT LIMIT">$47,704</td>
+                    <td data-label="YEAR">2.5</td>
+                    <td data-label="DISCOUNTED PRICE">$579.64</td>
+                    <td><button class="add-to-cart" data-id="6">Add to Cart</button></td>
+                </tr>
+                <tr class="product-item">
+                    <td data-label="ID">007</td>
+                    <td data-label="VENDOR">Grainger</td>
+                    <td data-label="ACCOUNT TYPE">Vendor Credit</td>
+                    <td data-label="CREDIT LIMIT">$42,924</td>
+                    <td data-label="YEAR">2.1</td>
+                    <td data-label="DISCOUNTED PRICE">$516.85</td>
+                    <td><button class="add-to-cart" data-id="7">Add to Cart</button></td>
+                </tr>
+                <tr class="product-item">
+                    <td data-label="ID">008</td>
+                    <td data-label="VENDOR">Quill</td>
+                    <td data-label="ACCOUNT TYPE">Commercial</td>
+                    <td data-label="CREDIT LIMIT">$79,034</td>
+                    <td data-label="YEAR">2.2</td>
+                    <td data-label="DISCOUNTED PRICE">$899.16</td>
+                    <td><button class="add-to-cart" data-id="8">Add to Cart</button></td>
+                </tr>
+                <tr class="product-item">
+                    <td data-label="ID">009</td>
+                    <td data-label="VENDOR">Shirtsy</td>
+                    <td data-label="ACCOUNT TYPE">Term Loan</td>
+                    <td data-label="CREDIT LIMIT">$81,917</td>
+                    <td data-label="YEAR">2.1</td>
+                    <td data-label="DISCOUNTED PRICE">$926.28</td>
+                    <td><button class="add-to-cart" data-id="9">Add to Cart</button></td>
+                </tr>
+                <tr class="product-item">
+                    <td data-label="ID">010</td>
+                    <td data-label="VENDOR">Uline</td>
+                    <td data-label="ACCOUNT TYPE">Equipment</td>
+                    <td data-label="CREDIT LIMIT">$47,805</td>
+                    <td data-label="YEAR">4.3</td>
+                    <td data-label="DISCOUNTED PRICE">$637.40</td>
+                    <td><button class="add-to-cart" data-id="10">Add to Cart</button></td>
+                </tr>
+                <tr class="product-item">
+                    <td data-label="ID">011</td>
+                    <td data-label="VENDOR">Uline</td>
+                    <td data-label="ACCOUNT TYPE">Vendor Credit</td>
+                    <td data-label="CREDIT LIMIT">$25,897</td>
+                    <td data-label="YEAR">4.6</td>
+                    <td data-label="DISCOUNTED PRICE">$416.82</td>
+                    <td><button class="add-to-cart" data-id="11">Add to Cart</button></td>
+                </tr>
+                <tr class="product-item">
+                    <td data-label="ID">012</td>
+                    <td data-label="VENDOR">NAV</td>
+                    <td data-label="ACCOUNT TYPE">Equipment</td>
+                    <td data-label="CREDIT LIMIT">$34,901</td>
+                    <td data-label="YEAR">3.2</td>
+                    <td data-label="DISCOUNTED PRICE">$467.26</td>
+                    <td><button class="add-to-cart" data-id="12">Add to Cart</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+    </div>
+</main>
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>TRADELINES</h3>
+                <p>Premium products for your lifestyle needs.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="products.html">Shop</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Customer Service</h4>
+                <ul>
+                    <li><a href="faqs.html">FAQs</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 TRADELINES. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="products.js"></script>
+<script src="cart-functions.js"></script>
+</body>
+</html>
