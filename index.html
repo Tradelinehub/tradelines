@@ -120,5 +120,35 @@ document.querySelector('.menu-toggle').addEventListener('click', function() {
 
     <script src="script.js"></script>
     <script src="cart-functions.js"></script>
+
+    <div id="tradelines"></div>
+
+<script>
+  async function loadTradelines() {
+    const { data, error } = await supabase
+      .from('tradelines')
+      .select('*')
+      .eq('is_active', true);
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    const container = document.getElementById('tradelines');
+    container.innerHTML = data.map(item => `
+      <div class="tradeline">
+        <img src="${item.image_url}" alt="${item.bank_name}" />
+        <h3>${item.bank_name}</h3>
+        <p>Credit Limit: $${item.credit_limit}</p>
+        <p>Age: ${item.years_old} years</p>
+        <p>Price: $${item.price}</p>
+      </div>
+    `).join('');
+  }
+
+  loadTradelines();
+</script>
+
 </body>
 </html>
