@@ -123,43 +123,49 @@ body {
       border-bottom: 1px solid #eaeaea;
     }
 
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
+    /* Modal Styles */
+.modal {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
 
-    .modal.hidden {
-      display: none;
-    }
+.modal.hidden {
+  display: none;
+}
 
-
-        /* Limit modal content size and allow it to scroll internally if too tall */
 .modal-content {
-    background-color: #fff;
-    padding: 20px;
-    max-height: 90vh;  /* Keeps it within viewport */
-    overflow-y: auto;  /* Enables internal scroll */
-    width: 100%;
-    max-width: 600px;
-    border-radius: 8px;
-    position: relative;
-  }
-    
-    .modal-close {
-      position: absolute;
-      right: 1rem;
-      top: 1rem;
-      font-size: 20px;
-      cursor: pointer;
-    }
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
 
     .form-group {
       margin-bottom: 1rem;
