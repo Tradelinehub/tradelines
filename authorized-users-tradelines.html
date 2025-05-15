@@ -157,6 +157,52 @@ document.querySelector('.menu-toggle').addEventListener('click', function() {
                     <td data-label="DISCOUNTED PRICE">$534.89</td>
                     <td><button class="add-to-cart" data-id="12">Add to Cart</button></td>
                 </tr>
+                <tbody id="product-body">
+        <!-- LIVE rows from Supabase will go here -->
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<script>
+  const supabase = supabase.createClient(
+    'https://YOUR_PROJECT.supabase.co', // 🔁 Replace with your actual Supabase project URL
+    'YOUR_ANON_KEY'                    // 🔁 Replace with your Supabase public anon key
+  );
+
+  async function loadProducts() {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .order('id', { ascending: true });
+
+    if (error) {
+      console.error('Supabase fetch error:', error.message);
+      return;
+    }
+
+    const tbody = document.getElementById('product-body');
+    tbody.innerHTML = ''; // Clear any existing rows
+
+    data.forEach(product => {
+      const row = document.createElement('tr');
+      row.className = 'product-item';
+
+      row.innerHTML = `
+        <td data-label="ID">${product.id}</td>
+        <td data-label="CREDIT CARD">${product.name}</td>
+        <td data-label="CREDIT LIMIT">${product.credit_limit}</td>
+        <td data-label="YEAR">${product.years}</td>
+        <td data-label="DISCOUNTED PRICE">${product.discount_price}</td>
+        <td><button class="add-to-cart" data-id="${product.id}">Add to Cart</button></td>
+      `;
+
+      tbody.appendChild(row);
+    });
+  }
+
+  loadProducts();
+</script>
             </tbody>
         </table>
     </div>
