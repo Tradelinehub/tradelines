@@ -1,145 +1,122 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const dynamicFields = document.getElementById("dynamicFields");
-  const productType = document.getElementById("productType");
-  const productModal = document.getElementById('productModal');
-  const productForm = document.getElementById('productForm');
-  const modalTitle = document.getElementById('modal-title');
-  let editingRow = null;
+// admin-products.js
 
-  document.getElementById('addProductBtn').addEventListener('click', function () {
-    editingRow = null;
-    modalTitle.textContent = "Add Product";
-    productForm.reset();
-    dynamicFields.innerHTML = '';
-    productModal.classList.remove('hidden');
-  });
-
-  document.getElementById('closeModal').addEventListener('click', hideModal);
-  document.getElementById('cancelBtn').addEventListener('click', hideModal);
-
-  function hideModal() {
-    productModal.classList.add('hidden');
-    editingRow = null;
-  }
-
-  productType.addEventListener("change", function () {
-    const type = this.value;
-    dynamicFields.innerHTML = generateFieldsByType(type);
-  });
-
-  function generateFieldsByType(type) {
-    let html = baseFields();
-
-    const fieldsByType = {
-      primary: ["Account Type", "Credit Limit", "How Many Years", "Discounted Price"],
-      auto: ["Vehicle", "Loan Amount", "How Many Years", "Discounted Price"],
-      business: ["Vendor", "Account Type", "Credit Limit", "How Many Years", "Discounted Price"],
-      mortgage: ["Lender", "Mortgage Type", "Loan Amount", "How Many Years", "Discounted Price"],
-      authorized: ["Credit Card", "Credit Limit", "How Many Years", "Discounted Price"]
-    };
-
-    fieldsByType[type]?.forEach(label => html += inputField(label));
-    return html;
-  }
-
-  function baseFields() {
-    return inputField("ID");
-  }
-
-  function inputField(label) {
-    const id = label.toLowerCase().replace(/\s+/g, '-');
-    return `
-      <div class="form-group">
-        <label for="${id}">${label}</label>
-        <input type="text" id="${id}" name="${id}" required>
-      </div>
-    `;
-  }
-
-  productForm.addEventListener('submit', function (event) {
-    event.preventDefault();
-    const formData = new FormData(this);
-    const data = Object.fromEntries(formData.entries());
-
-    const typeText = productType.options[productType.selectedIndex].text;
-    const imageSrc = `img/default.jpg`;
-    const creditVal = data['credit-limit'] || data['loan-amount'] || '—';
-    const years = data['how-many-years'] || '—';
-    const price = data['discounted-price'] || '—';
-
-    if (editingRow) {
-      editingRow.innerHTML = `
-        <td><img src="${imageSrc}" alt="${data.id}" width="50"></td>
-        <td>${typeText}</td>
-        <td>${data['id']}</td>
-        <td>${creditVal}</td>
-        <td>${years}</td>
-        <td>${price}</td>
-        <td>10</td>
-        <td>
-          <button class="btn-sm edit-btn"><i class="fas fa-edit"></i></button>
-          <button class="btn-sm delete-btn"><i class="fas fa-trash"></i></button>
-        </td>
-      `;
-      attachRowEventListeners(editingRow);
-    } else {
-      const table = document.getElementById('product-list');
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td><img src="${imageSrc}" alt="${data.id}" width="50"></td>
-        <td>${typeText}</td>
-        <td>${data['id']}</td>
-        <td>${creditVal}</td>
-        <td>${years}</td>
-        <td>${price}</td>
-        <td>10</td>
-        <td>
-          <button class="btn-sm edit-btn"><i class="fas fa-edit"></i></button>
-          <button class="btn-sm delete-btn"><i class="fas fa-trash"></i></button>
-        </td>
-      `;
-      attachRowEventListeners(row);
-      table.appendChild(row);
-    }
-
-    hideModal();
-  });
-
-  function attachRowEventListeners(row) {
-    row.querySelector('.delete-btn').addEventListener('click', function () {
-      row.remove();
-    });
-
-    row.querySelector('.edit-btn').addEventListener('click', function () {
-      editingRow = row;
-      modalTitle.textContent = "Edit Product";
-      productModal.classList.remove('hidden');
-
-      const type = row.children[1].textContent.toLowerCase();
-      const id = row.children[2].textContent;
-      const credit = row.children[3].textContent;
-      const years = row.children[4].textContent;
-      const price = row.children[5].textContent;
-
-      productType.value = type;
-      dynamicFields.innerHTML = generateFieldsByType(type);
-
-      document.getElementById('id').value = id;
-
-      if (document.getElementById('credit-limit')) {
-        document.getElementById('credit-limit').value = credit;
-      }
-      if (document.getElementById('loan-amount')) {
-        document.getElementById('loan-amount').value = credit;
-      }
-      if (document.getElementById('how-many-years')) {
-        document.getElementById('how-many-years').value = years;
-      }
-      if (document.getElementById('discounted-price')) {
-        document.getElementById('discounted-price').value = price;
-      }
-    });
-  }
-
-  document.querySelectorAll('#product-list tr').forEach(attachRowEventListeners);
+document.addEventListener('DOMContentLoaded', () => {
+  loadProducts();
+  document.getElementById('addProductBtn').addEventListener('click', openAddModal);
+  document.getElementById('cancelBtn').addEventListener('click', closeModal);
+  document.getElementById('closeModal').addEventListener('click', closeModal);
+  document.getElementById('productForm').addEventListener('submit', saveProduct);
 });
+
+let currentProductId = null;
+
+async function loadProducts() {
+  const { data, error } = await supabase.from('products').select('*');
+  const tbody = document.getElementById('product-list');
+  tbody.innerHTML = '';
+
+  if (error) return alert('Failed to load products.');
+
+  data.forEach(product => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><img src="${product.image_url}" width="50" /></td>
+      <td>${product.type}</td>
+      <td>${product.name}</td>
+      <td>${product.credit_limit}</td>
+      <td>${product.years}</td>
+      <td>$${product.price}</td>
+      <td>${product.stock}</td>
+      <td>
+        <button class="btn-sm edit-btn" data-id="${product.id}"><i class="fas fa-edit"></i></button>
+        <button class="btn-sm delete-btn" data-id="${product.id}"><i class="fas fa-trash"></i></button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  document.querySelectorAll('.edit-btn').forEach(btn =>
+    btn.addEventListener('click', () => openEditModal(btn.dataset.id))
+  );
+  document.querySelectorAll('.delete-btn').forEach(btn =>
+    btn.addEventListener('click', () => deleteProduct(btn.dataset.id))
+  );
+}
+
+function openAddModal() {
+  currentProductId = null;
+  document.getElementById('modal-title').textContent = 'Add Product';
+  document.getElementById('productForm').reset();
+  document.getElementById('productModal').classList.remove('hidden');
+}
+
+async function openEditModal(id) {
+  const { data: product } = await supabase.from('products').select('*').eq('id', id).single();
+
+  currentProductId = id;
+  document.getElementById('modal-title').textContent = 'Edit Product';
+  document.getElementById('productType').value = product.type;
+
+  // Fill dynamic fields
+  const fields = `
+    <div class="form-group">
+      <label>Name</label><input type="text" id="productName" value="${product.name}" required>
+    </div>
+    <div class="form-group">
+      <label>Credit Limit</label><input type="text" id="creditLimit" value="${product.credit_limit}" required>
+    </div>
+    <div class="form-group">
+      <label>Years</label><input type="text" id="years" value="${product.years}" required>
+    </div>
+    <div class="form-group">
+      <label>Price</label><input type="number" id="price" value="${product.price}" required>
+    </div>
+    <div class="form-group">
+      <label>Stock</label><input type="number" id="stock" value="${product.stock}" required>
+    </div>
+    <div class="form-group">
+      <label>Image URL</label><input type="text" id="imageUrl" value="${product.image_url}" required>
+    </div>
+  `;
+  document.getElementById('dynamicFields').innerHTML = fields;
+  document.getElementById('productModal').classList.remove('hidden');
+}
+
+function closeModal() {
+  document.getElementById('productModal').classList.add('hidden');
+}
+
+async function saveProduct(e) {
+  e.preventDefault();
+
+  const product = {
+    type: document.getElementById('productType').value,
+    name: document.getElementById('productName')?.value || '',
+    credit_limit: document.getElementById('creditLimit')?.value || '',
+    years: document.getElementById('years')?.value || '',
+    price: parseFloat(document.getElementById('price')?.value || 0),
+    stock: parseInt(document.getElementById('stock')?.value || 0),
+    image_url: document.getElementById('imageUrl')?.value || '',
+  };
+
+  let result;
+  if (currentProductId) {
+    result = await supabase.from('products').update(product).eq('id', currentProductId);
+  } else {
+    result = await supabase.from('products').insert(product);
+  }
+
+  if (result.error) {
+    alert('Error saving product.');
+  } else {
+    closeModal();
+    loadProducts(); // Refresh
+  }
+}
+
+async function deleteProduct(id) {
+  if (!confirm('Are you sure you want to delete this product?')) return;
+  const { error } = await supabase.from('products').delete().eq('id', id);
+  if (error) return alert('Failed to delete.');
+  loadProducts();
+}
