@@ -2,7 +2,6 @@
 const supabaseUrl = 'https://vlwxcpssejuuegmqbcol.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsd3hjcHNzZWp1dWVnbXFiY29sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDczMTY0MjUsImV4cCI6MjA2Mjg5MjQyNX0.gGbP7xcCNNPGTDRoXzjtGrlKu9GDb4a94QkNVwxAt90';
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
 document.addEventListener("DOMContentLoaded", async function () {
   const dynamicFields = document.getElementById("dynamicFields");
   const productType = document.getElementById("productType");
@@ -10,6 +9,9 @@ document.addEventListener("DOMContentLoaded", async function () {
   const productForm = document.getElementById('productForm');
   const modalTitle = document.getElementById('modal-title');
   const productList = document.getElementById('product-list');
+  const addProductBtn = document.getElementById('addProductBtn');
+  const closeModalBtn = document.getElementById('closeModal');
+  const cancelBtn = document.getElementById('cancelBtn');
   
   let editingRow = null;
   let currentProductId = null;
@@ -17,17 +19,22 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Load products on page load
   await loadProducts();
 
-  document.getElementById('addProductBtn').addEventListener('click', function () {
+  // Event Listeners
+  addProductBtn.addEventListener('click', showAddModal);
+  closeModalBtn.addEventListener('click', hideModal);
+  cancelBtn.addEventListener('click', hideModal);
+  productType.addEventListener("change", updateDynamicFields);
+  productForm.addEventListener('submit', handleFormSubmit);
+
+  function showAddModal() {
     currentProductId = null;
     editingRow = null;
     modalTitle.textContent = "Add Product";
     productForm.reset();
     dynamicFields.innerHTML = '';
     productModal.classList.remove('hidden');
-  });
-
-  document.getElementById('closeModal').addEventListener('click', hideModal);
-  document.getElementById('cancelBtn').addEventListener('click', hideModal);
+    productType.value = ''; // Reset the select
+  }
 
   function hideModal() {
     productModal.classList.add('hidden');
@@ -35,12 +42,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     currentProductId = null;
   }
 
-  productType.addEventListener("change", function () {
-    const type = this.value;
+  function updateDynamicFields() {
+    const type = productType.value;
     dynamicFields.innerHTML = generateFieldsByType(type);
-  });
+  }
 
   function generateFieldsByType(type) {
+    if (!type) return '';
+    
     let html = baseFields();
 
     const fieldsByType = {
@@ -69,9 +78,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     `;
   }
 
-  productForm.addEventListener('submit', async function (event) {
+  async function handleFormSubmit(event) {
     event.preventDefault();
-    const formData = new FormData(this);
+    
+    // Check if a product type is selected
+    if (!productType.value) {
+      alert('Please select a product type');
+      return;
+    }
+
+    const formData = new FormData(productForm);
     const data = Object.fromEntries(formData.entries());
     
     const productData = {
@@ -115,7 +131,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       console.error('Error saving product:', error);
       alert('Error saving product. Please try again.');
     }
-  });
+  }
 
   async function loadProducts() {
     try {
@@ -128,28 +144,32 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       productList.innerHTML = '';
       
-      products.forEach(product => {
-        const row = document.createElement('tr');
-        row.dataset.id = product.id;
-        row.innerHTML = `
-          <td><img src="${product.image_url || 'img/default.jpg'}" alt="${product.name}" width="50"></td>
-          <td>${product.type_text}</td>
-          <td>${product.name}</td>
-          <td>${product.credit_limit ? '$' + product.credit_limit : '—'}</td>
-          <td>${product.years || '—'}</td>
-          <td>${product.price ? '$' + product.price : '—'}</td>
-          <td>${product.stock || 0}</td>
-          <td>
-            <button class="btn-sm edit-btn"><i class="fas fa-edit"></i></button>
-            <button class="btn-sm delete-btn"><i class="fas fa-trash"></i></button>
-          </td>
-        `;
-        attachRowEventListeners(row);
-        productList.appendChild(row);
-      });
+      if (products && products.length > 0) {
+        products.forEach(product => {
+          const row = document.createElement('tr');
+          row.dataset.id = product.id;
+          row.innerHTML = `
+            <td><img src="${product.image_url || 'img/default.jpg'}" alt="${product.name}" width="50"></td>
+            <td>${product.type_text}</td>
+            <td>${product.name}</td>
+            <td>${product.credit_limit ? '$' + product.credit_limit : '—'}</td>
+            <td>${product.years || '—'}</td>
+            <td>${product.price ? '$' + product.price : '—'}</td>
+            <td>${product.stock || 0}</td>
+            <td>
+              <button class="btn-sm edit-btn"><i class="fas fa-edit"></i></button>
+              <button class="btn-sm delete-btn"><i class="fas fa-trash"></i></button>
+            </td>
+          `;
+          attachRowEventListeners(row);
+          productList.appendChild(row);
+        });
+      } else {
+        productList.innerHTML = '<tr><td colspan="8">No products found</td></tr>';
+      }
     } catch (error) {
       console.error('Error loading products:', error);
-      alert('Error loading products. Please refresh the page.');
+      productList.innerHTML = '<tr><td colspan="8">Error loading products</td></tr>';
     }
   }
 
@@ -189,47 +209,50 @@ document.addEventListener("DOMContentLoaded", async function () {
         modalTitle.textContent = "Edit Product";
         productModal.classList.remove('hidden');
 
-        // Set the product type
+        // Set the product type first
         productType.value = product.type;
+        // Then generate the fields
         dynamicFields.innerHTML = generateFieldsByType(product.type);
 
-        // Fill in the form fields
-        document.getElementById('name').value = product.name || '';
-        document.getElementById('image-url').value = product.image_url || '';
-        
-        if (document.getElementById('account-type')) {
-          document.getElementById('account-type').value = product.account_type || '';
-        }
-        if (document.getElementById('credit-limit')) {
-          document.getElementById('credit-limit').value = product.credit_limit || '';
-        }
-        if (document.getElementById('loan-amount')) {
-          document.getElementById('loan-amount').value = product.credit_limit || '';
-        }
-        if (document.getElementById('how-many-years')) {
-          document.getElementById('how-many-years').value = product.years || '';
-        }
-        if (document.getElementById('discounted-price')) {
-          document.getElementById('discounted-price').value = product.price || '';
-        }
-        if (document.getElementById('stock')) {
-          document.getElementById('stock').value = product.stock || '';
-        }
-        if (document.getElementById('vehicle')) {
-          document.getElementById('vehicle').value = product.vehicle || '';
-        }
-        if (document.getElementById('vendor')) {
-          document.getElementById('vendor').value = product.vendor || '';
-        }
-        if (document.getElementById('lender')) {
-          document.getElementById('lender').value = product.lender || '';
-        }
-        if (document.getElementById('mortgage-type')) {
-          document.getElementById('mortgage-type').value = product.mortgage_type || '';
-        }
-        if (document.getElementById('credit-card')) {
-          document.getElementById('credit-card').value = product.credit_card || '';
-        }
+        // Fill in the form fields - we need to wait for the fields to be created
+        setTimeout(() => {
+          document.getElementById('name').value = product.name || '';
+          document.getElementById('image-url').value = product.image_url || '';
+          
+          if (document.getElementById('account-type')) {
+            document.getElementById('account-type').value = product.account_type || '';
+          }
+          if (document.getElementById('credit-limit')) {
+            document.getElementById('credit-limit').value = product.credit_limit || '';
+          }
+          if (document.getElementById('loan-amount')) {
+            document.getElementById('loan-amount').value = product.credit_limit || '';
+          }
+          if (document.getElementById('how-many-years')) {
+            document.getElementById('how-many-years').value = product.years || '';
+          }
+          if (document.getElementById('discounted-price')) {
+            document.getElementById('discounted-price').value = product.price || '';
+          }
+          if (document.getElementById('stock')) {
+            document.getElementById('stock').value = product.stock || '';
+          }
+          if (document.getElementById('vehicle')) {
+            document.getElementById('vehicle').value = product.vehicle || '';
+          }
+          if (document.getElementById('vendor')) {
+            document.getElementById('vendor').value = product.vendor || '';
+          }
+          if (document.getElementById('lender')) {
+            document.getElementById('lender').value = product.lender || '';
+          }
+          if (document.getElementById('mortgage-type')) {
+            document.getElementById('mortgage-type').value = product.mortgage_type || '';
+          }
+          if (document.getElementById('credit-card')) {
+            document.getElementById('credit-card').value = product.credit_card || '';
+          }
+        }, 50);
       } catch (error) {
         console.error('Error loading product for edit:', error);
         alert('Error loading product details. Please try again.');
