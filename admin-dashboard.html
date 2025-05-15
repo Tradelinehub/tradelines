@@ -29,22 +29,39 @@
     </header>
 
     <section class="cards">
-      <div class="card">
-        <h3>Total Users</h3>
-        <p>1,245</p>
-      </div>
-      <div class="card">
-        <h3>Total Products</h3>
-        <p>320</p>
-      </div>
-      <div class="card">
-        <h3>Orders</h3>
-        <p>890</p>
-      </div>
-      <div class="card">
-        <h3>Revenue</h3>
-        <p>$12,400</p>
-      </div>
+      <script>
+  async function loadDashboardStats() {
+    // Fetch total users
+    const { count: userCount } = await supabase
+      .from('users')
+      .select('*', { count: 'exact', head: true });
+
+    // Fetch total products
+    const { count: productCount } = await supabase
+      .from('products')
+      .select('*', { count: 'exact', head: true });
+
+    // Fetch total orders
+    const { count: orderCount, data: orderData } = await supabase
+      .from('orders')
+      .select('*', { count: 'exact' });
+
+    // Calculate revenue (assuming each order has 'total' field)
+    let totalRevenue = 0;
+    if (orderData) {
+      totalRevenue = orderData.reduce((sum, order) => sum + (order.total || 0), 0);
+    }
+
+    // Inject into the page
+    document.querySelector('.card:nth-child(1) p').textContent = userCount || 0;
+    document.querySelector('.card:nth-child(2) p').textContent = productCount || 0;
+    document.querySelector('.card:nth-child(3) p').textContent = orderCount || 0;
+    document.querySelector('.card:nth-child(4) p').textContent = `$${totalRevenue.toLocaleString()}`;
+  }
+
+  loadDashboardStats();
+</script>
+
     </section>
 
     <section class="chart-section">
