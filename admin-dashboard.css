@@ -1,0 +1,134 @@
+/* Reset & Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  min-height: 100vh;
+  background-color: #f4f7fc;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  height: 100vh;
+  background-color: #0b2b4c;
+  padding: 30px 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  color: #fff;
+}
+
+.sidebar h2 {
+  font-size: 20px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar ul li {
+  margin-bottom: 20px;
+}
+
+.sidebar ul li a {
+  color: #cbd6e2;
+  text-decoration: none;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li.active a {
+  color: #fff;
+  font-weight: bold;
+}
+
+
+/* Main Content */
+.main-content {
+  margin-left: 240px;
+  padding: 40px 30px;
+  width: calc(100% - 240px);
+}
+
+header h1 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #1f4c81;
+  font-weight: 600;
+}
+
+/* Cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+.card {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border-left: 6px solid #1f4c81;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.card h3 {
+  font-size: 1.1rem;
+  color: #18375d;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Chart Section */
+.chart-section {
+  background: #fff;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.chart-section h2 {
+  margin-bottom: 25px;
+  font-size: 1.4rem;
+  color: #1f4c81;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* Responsive Tweaks */
+@media screen and (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding: 20px;
+    width: 100%;
+  }
+
+  .sidebar {
+    display: none;
+  }
+}

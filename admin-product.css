@@ -1,0 +1,210 @@
+/* Reset & Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  min-height: 100vh;
+  background-color: #f4f7fc;
+  color: #333;
+  line-height: 1.6;
+}
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  height: 100vh;
+  background-color: #0b2b4c;
+  padding: 30px 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  color: #fff;
+}
+
+.sidebar h2 {
+  font-size: 20px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar ul li {
+  margin-bottom: 20px;
+}
+
+.sidebar ul li a {
+  color: #cbd6e2;
+  text-decoration: none;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li.active a {
+  color: #fff;
+  font-weight: bold;
+}
+
+/* Main Layout Refinement */
+.main-content {
+    margin-left: 220px; /* Exact width of the sidebar */
+    padding: 40px 60px;
+    width: calc(100% - 220px);
+    box-sizing: border-box;
+  }
+
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .admin-header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      border-radius: 4px;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .btn-secondary {
+      background-color: #6c757d;
+      color: white;
+    }
+
+    .btn-sm {
+      padding: 0.3rem 0.6rem;
+      font-size: 13px;
+      margin: 0 3px;
+      border: none;
+      background-color: #e0e0e0;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .product-table-section {
+      background: white;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      overflow-x: auto;
+    }
+
+    .product-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .product-table thead {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .product-table th, .product-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal.hidden {
+      display: none;
+    }
+
+
+        /* Limit modal content size and allow it to scroll internally if too tall */
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    max-height: 90vh;  /* Keeps it within viewport */
+    overflow-y: auto;  /* Enables internal scroll */
+    width: 100%;
+    max-width: 600px;
+    border-radius: 8px;
+    position: relative;
+  }
+    
+    .modal-close {
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-group select,
+    .form-group input {
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+
+
+    
+/* Responsive Design */
+@media (max-width: 768px) {
+  .admin-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .product-table {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .product-table td,
+  .product-table th {
+    padding: 10px;
+  }
+
+  .modal-content {
+    width: 90%;
+  }
+}
