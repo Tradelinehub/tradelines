@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRADELINES - Checkout</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="checkout.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .checkout-error {
+            color: #dc3545;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #dc3545;
+            border-radius: 4px;
+            background-color: #f8d7da;
+            display: none;
+        }
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        .loading-spinner {
+            color: white;
+            font-size: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1><a href="index.html">TRADELINES</a></h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="products.html">Shop</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="header-icons">
+                <a href="cart.html" class="cart-link">
+                    <div class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </div>
+                </a>
+                <a href="auth.html" class="user-icon"><i class="fas fa-user"></i></a>
+            </div>
+            <button class="menu-toggle">☰</button>
+        </div>
+    </header>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+        </div>
+    </div>
+
+    <!-- Checkout Content -->
+    <main class="checkout-page">
+        <div class="container">
+            <div class="checkout-header">
+                <h1><i class="fas fa-shopping-cart"></i> Checkout</h1>
+            </div>
+
+            <div id="checkout-error" class="checkout-error"></div>
+
+            <div class="checkout-grid">
+                <!-- Checkout Form Section -->
+                <section class="checkout-form">
+                    <form id="payment-form">
+                        <!-- Customer Information -->
+                        <div class="checkout-section">
+                            <h3><i class="fas fa-user"></i> Customer Information</h3>
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="first-name">First Name *</label>
+                                    <input type="text" id="first-name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="last-name">Last Name *</label>
+                                    <input type="text" id="last-name" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" id="phone" required>
+                            </div>
+                        </div>
+
+                        <!-- Payment Method -->
+                        <div class="checkout-section payment-methods">
+                            <h3><i class="fas fa-credit-card"></i> Payment Method *</h3>
+                            
+                            <div class="payment-tabs">
+                                <button type="button" class="payment-tab active" data-method="card">
+                                    <i class="fas fa-credit-card"></i> Credit/Debit Card
+                                </button>
+                                <button type="button" class="payment-tab" data-method="paypal">
+                                    <i class="fab fa-paypal"></i> PayPal
+                                </button>
+                                <button type="button" class="payment-tab" data-method="bank">
+                                    <i class="fas fa-university"></i> Bank Transfer
+                                </button>
+                            </div>
+
+                            <!-- Card Payment -->
+                            <div class="payment-content active" id="card-payment">
+                                <div class="form-group">
+                                    <label for="card-number">Card Number *</label>
+                                    <div class="card-input">
+                                        <input type="text" id="card-number" placeholder="1234 5678 9012 3456" required>
+                                        <div class="card-icons">
+                                            <i class="fab fa-cc-visa"></i>
+                                            <i class="fab fa-cc-mastercard"></i>
+                                            <i class="fab fa-cc-amex"></i>
+                                            <i class="fab fa-cc-discover"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="expiry">Expiry Date *</label>
+                                        <input type="text" id="expiry" placeholder="MM/YY" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cvv">CVV *</label>
+                                        <input type="text" id="cvv" placeholder="123" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="card-name">Name on Card *</label>
+                                    <input type="text" id="card-name" required>
+                                </div>
+                            </div>
+
+                            <!-- PayPal Payment -->
+                            <div class="payment-content" id="paypal-payment">
+                                <div class="paypal-container">
+                                    <div id="paypal-button-container"></div>
+                                    <p class="paypal-note">
+                                        <i class="fas fa-lock"></i> You'll be redirected to PayPal to complete your payment
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Bank Transfer -->
+                            <div class="payment-content" id="bank-payment">
+                                <div class="bank-info">
+                                    <h4><i class="fas fa-university"></i> Bank Transfer Details</h4>
+                                    <div class="bank-details">
+                                        <div class="detail-row">
+                                            <span>Bank Name:</span>
+                                            <strong>Chase Bank</strong>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span>Account Name:</span>
+                                            <strong>Tradelines Inc.</strong>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span>Account Number:</span>
+                                            <strong>1234567890</strong>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span>Routing Number:</span>
+                                            <strong>021000021</strong>
+                                        </div>
+                                    </div>
+                                    <p class="bank-note">
+                                        <i class="fas fa-info-circle"></i> 
+                                        Please include your order number as payment reference
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Billing Address -->
+                        <div class="checkout-section">
+                            <h3><i class="fas fa-map-marker-alt"></i> Billing Address *</h3>
+                            <div class="form-group">
+                                <label for="address">Street Address *</label>
+                                <input type="text" id="address" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="city">City *</label>
+                                    <input type="text" id="city" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="state">State/Province *</label>
+                                    <select id="state" required>
+                                        <option value="">Select State</option>
+                                        <option value="IL">Illinois</option>
+                                        <option value="CA">California</option>
+                                        <!-- States would be populated here -->
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="zip">ZIP/Postal Code *</label>
+                                    <input type="text" id="zip" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="country">Country *</label>
+                                <select id="country" required>
+                                    <option value="US">United States</option>
+                                    <option value="CA">Canada</option>
+                                    <!-- More countries would be added here -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Order Notes -->
+                        <div class="checkout-section">
+                            <h3><i class="fas fa-edit"></i> Order Notes (Optional)</h3>
+                            <div class="form-group">
+                                <textarea id="notes" placeholder="Special instructions for your order..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Terms and Conditions -->
+                        <div class="checkout-section terms">
+                            <div class="form-group checkbox">
+                                <input type="checkbox" id="terms" required>
+                                <label for="terms">
+                                    I agree to the <a href="#" target="_blank">Terms of Service</a> and 
+                                    <a href="#" target="_blank">Privacy Policy</a> *
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-submit" id="place-order">
+                            <i class="fas fa-lock"></i> Complete Purchase
+                        </button>
+                    </form>
+                </section>
+
+                <!-- Order Summary Section -->
+                <aside class="order-summary">
+                    <h3><i class="fas fa-receipt"></i> Order Summary</h3>
+                    <div class="summary-items" id="summary-items">
+                        <!-- Items will be populated by JavaScript -->
+                    </div>
+                    <div class="summary-totals">
+                        <div class="total-row">
+                            <span>Subtotal</span>
+                            <span id="summary-subtotal">$0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Tax</span>
+                            <span id="summary-tax">$0.00</span>
+                        </div>
+                        <div class="total-row grand-total">
+                            <span>Total</span>
+                            <span id="summary-total">$0.00</span>
+                        </div>
+                    </div>
+                    <div class="summary-guarantee">
+                        <div class="guarantee-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>100% Secure Payment</span>
+                        </div>
+                        <div class="guarantee-item">
+                            <i class="fas fa-lock"></i>
+                            <span>256-bit Encryption</span>
+                        </div>
+                        <div class="guarantee-item">
+                            <i class="fas fa-user-shield"></i>
+                            <span>Privacy Protected</span>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2023 TRADELINES. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Refund Policy</a>
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="cart-functions.js"></script>
+    <script src="checkout.js"></script>
+    <script>
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.main-nav').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

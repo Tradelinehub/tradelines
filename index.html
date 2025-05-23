@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRADELINES - Premium Products</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Header with Navigation -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1><a href="index.html"> TRADELINES </a></h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="products.html">Shop</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="header-icons">
+                <a href="cart.html" class="nav-link cart-link">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </a>
+                <a href="auth.html" class="user-icon"><i class="fas fa-user"></i></a>
+            </div>
+            <button class="menu-toggle">☰</button>
+<script>
+document.querySelector('.menu-toggle').addEventListener('click', function() {
+    document.querySelector('.main-nav').classList.toggle('active');
+});
+</script>
+        </div>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Premium Products for Discerning Tastes</h2>
+                <p>Discover our curated collection of high-quality items</p>
+                <a href="products.html" class="btn btn-primary">Shop Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Categories -->
+    <section class="categories">
+        <div class="container">
+            <h2 class="section-title">Shop by Category</h2>
+            <div class="category-grid">
+                <div class="category-card">
+                    <img src="primary tradelines.png" alt="Primary Tradelines">
+                    <a href="primary-tradelines.html" class="btn btn-secondary">Explore</a>
+                </div>
+                <div class="category-card">
+                    <img src="auto tradelines.png" alt="Auto Tradelines">
+                    <a href="auto-tradelines.html" class="btn btn-secondary">Explore</a>
+                </div>
+                <div class="category-card">
+                    <img src="business tradelines.png" alt="Business Tradelines">
+                    <a href="business-tradelines.html" class="btn btn-secondary">Explore</a>
+                </div>
+                <div class="category-card">
+                    <img src="mortgage tradelines.png" alt="Mortgage Tradelines">
+                    <a href="mortgage-tradelines.html" class="btn btn-secondary">Explore</a>
+                </div>
+                <div class="category-card">
+                    <img src="authorized users tradelines.png" alt="Authorized User Tradelines">
+                    <a href="authorized-users-tradelines.html" class="btn btn-secondary">Explore</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Newsletter Signup -->
+    <section class="newsletter">
+        <div class="container">
+            <h2>Stay Updated</h2>
+            <p>Subscribe to our newsletter for the latest products and offers</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Your email address" required>
+                <button type="submit" class="btn btn-primary">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>TRADELINES</h3>
+                    <p>Premium products for your lifestyle needs.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="products.html">Shop</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="faqs.html">FAQs</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 TRADELINES. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="cart-functions.js"></script>
+</body>
+</html>

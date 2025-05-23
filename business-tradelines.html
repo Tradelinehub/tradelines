@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRADELINES - Business Tradelines</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="products.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .error-message {
+            color: #dc3545;
+            padding: 10px;
+            text-align: center;
+        }
+        .add-to-cart-feedback {
+            color: #28a745;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            animation: fadeOut 2s forwards;
+            animation-delay: 1s;
+        }
+        @keyframes fadeOut {
+            to { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1><a href="index.html">TRADELINES</a></h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="products.html" class="active">Shop</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="header-icons">
+                <a href="cart.html" class="cart-link">
+                    <div class="cart-icon">
+                      <i class="fas fa-shopping-cart"></i>
+                      <span class="cart-count">0</span>
+                    </div>
+                  </a>
+                <a href="auth.html" class="user-icon"><i class="fas fa-user"></i></a>
+            </div>
+            <button class="menu-toggle">☰</button>
+        </div>
+    </header>
+
+    <!-- Product Listing Section -->
+    <main class="product-listing">
+        <div class="container">
+            <div class="listing-header">
+                <h1>BUSINESS TRADELINES</h1>
+            </div>
+
+            <!-- Business Tradelines -->
+            <section class="category-section" data-category="business_tradelines">
+                <h2 class="category-title">Business Tradelines</h2>
+                <div class="product-table-container">
+                    <table class="product-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>VENDOR</th>
+                                <th>ACCOUNT TYPE</th>
+                                <th>CREDIT LIMIT</th>
+                                <th>YEARS</th>
+                                <th>DISCOUNTED PRICE</th>
+                                <th>ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody id="product-list">
+                            <!-- Products will be dynamically inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>TRADELINES</h3>
+                    <p>Premium products for your business credit needs.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="products.html">Shop</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="faqs.html">FAQs</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 TRADELINES. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="cart-functions.js"></script>
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+        const supabaseUrl = 'https://vlwxcpssejuuegmqbcol.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsd3hjcHNzZWp1dWVnbXFiY29sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDczMTY0MjUsImV4cCI6MjA2Mjg5MjQyNX0.gGbP7xcCNNPGTDRoXzjtGrlKu9GDb4a94QkNVwxAt90';
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        // Initialize cart count on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            TradelinesCart.updateCartCount();
+            loadBusinessTradelines();
+            
+            // Menu toggle functionality
+            document.querySelector('.menu-toggle').addEventListener('click', function() {
+                document.querySelector('.main-nav').classList.toggle('active');
+            });
+        });
+
+        async function loadBusinessTradelines() {
+            try {
+                const { data, error } = await supabase
+                    .from('products')
+                    .select('id, business_vendor, business_account_type, business_credit_limit, business_years, business_discount_price')
+                    .eq('product_type', 'business_tradelines')
+                    .order('business_credit_limit', { ascending: false });
+
+                if (error) throw error;
+
+                const tableBody = document.getElementById('product-list');
+                tableBody.innerHTML = '';
+
+                if (!data || data.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="7">No business tradelines available</td></tr>';
+                    return;
+                }
+
+                data.forEach(product => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${product.id}</td>
+                        <td>${product.business_vendor || 'N/A'}</td>
+                        <td>${product.business_account_type || 'N/A'}</td>
+                        <td>${product.business_credit_limit ? '$' + product.business_credit_limit.toLocaleString() : 'N/A'}</td>
+                        <td>${product.business_years || 'N/A'}</td>
+                        <td>${product.business_discount_price ? '$' + product.business_discount_price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'N/A'}</td>
+                        <td>
+                            <button class="add-to-cart" 
+                                    data-id="${product.id}"
+                                    data-name="${product.business_vendor || 'Business Tradeline'}"
+                                    data-price="${product.business_discount_price || 0}">
+                                Add to Cart
+                            </button>
+                            <div class="add-to-cart-feedback"></div>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+                // Add event listeners to all add-to-cart buttons
+                document.querySelectorAll('.add-to-cart').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const productId = this.dataset.id;
+                        const productName = this.dataset.name;
+                        const productPrice = parseFloat(this.dataset.price);
+                        
+                        TradelinesCart.addItem(productId, productName, productPrice);
+                        
+                        // Show feedback
+                        const feedback = this.nextElementSibling;
+                        feedback.textContent = 'Added to cart!';
+                        feedback.style.opacity = '1';
+                        
+                        setTimeout(() => {
+                            feedback.style.opacity = '0';
+                        }, 2000);
+                    });
+                });
+
+            } catch (error) {
+                console.error('Error loading products:', error);
+                document.getElementById('product-list').innerHTML = `
+                    <tr><td colspan="7" class="error-message">
+                        Error loading products: ${error.message}
+                    </td></tr>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

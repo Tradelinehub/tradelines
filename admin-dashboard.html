@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TRADELINES Admin Dashboard</title>
+  <link rel="stylesheet" href="admin-dashboard.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <h2>TRADELINES Admin</h2>
+    <ul>
+      <li class="active"><a href="admin-dashboard.html">Dashboard</a></li>
+      <li ><a href="admin-products.html">Products</a></li>
+      <li><a href="admin-orders.html">Orders</a></li>
+      <li><a href="admin-users.html">Users</a></li>
+      <li><a href="admin-settings.html">Settings</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+    <header>
+      <h1>Welcome, Admin</h1>
+    </header>
+
+    <section class="cards">
+      <div class="card">
+        <h3>Total Users</h3>
+        <p>1,245</p>
+      </div>
+      <div class="card">
+        <h3>Total Products</h3>
+        <p>320</p>
+      </div>
+      <div class="card">
+        <h3>Orders</h3>
+        <p>890</p>
+      </div>
+      <div class="card">
+        <h3>Revenue</h3>
+        <p>$12,400</p>
+      </div>
+    </section>
+
+    <section class="chart-section">
+      <h2>Sales Overview</h2>
+      <canvas id="salesChart"></canvas>
+    </section>
+  </main>
+
+  <script>
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+        datasets: [{
+          label: 'Sales',
+          data: [1200, 1900, 3000, 5000, 2400],
+          backgroundColor: 'rgba(24, 55, 93, 0.2)',
+          borderColor: '#18375d',
+          borderWidth: 2,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
