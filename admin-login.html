@@ -1,95 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TRADELINES Admin Login</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Preconnect to external resources -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  
+  <!-- Inline critical CSS -->
   <style>
     :root {
       --primary-color: #4a6cf7;
       --background-color: #f5f7fa;
       --text-color: #333;
     }
-
+    
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Poppins', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
-
+    
     body {
       background-color: var(--background-color);
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
+      padding: 20px;
     }
-
+    
     .login-container {
       background: white;
-      padding: 40px 30px;
+      padding: 30px;
       border-radius: 10px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       width: 100%;
       max-width: 400px;
     }
-
+    
     .login-container h2 {
-      margin-bottom: 25px;
+      margin-bottom: 20px;
       text-align: center;
       color: var(--primary-color);
+      font-size: 1.5rem;
     }
-
+    
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
-
+    
     label {
       display: block;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       font-weight: 600;
+      color: var(--text-color);
     }
-
+    
     input {
       width: 100%;
-      padding: 10px 14px;
-      border: 1px solid #ccc;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
       border-radius: 6px;
       font-size: 14px;
     }
-
+    
+    input:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+    
     .login-btn {
       width: 100%;
-      padding: 12px;
+      padding: 10px;
       background-color: var(--primary-color);
       color: white;
       border: none;
       border-radius: 6px;
-      font-size: 16px;
+      font-size: 15px;
+      font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.3s;
     }
-
-    .login-btn:hover {
-      background-color: #3b57c3;
-    }
-
+    
     .error-message {
-      color: red;
+      color: #e74c3c;
       text-align: center;
-      margin-top: 15px;
+      margin-top: 12px;
+      font-size: 14px;
       display: none;
     }
-
+    
     @media (max-width: 500px) {
       .login-container {
-        padding: 30px 20px;
+        padding: 25px 20px;
+      }
+      
+      .login-container h2 {
+        font-size: 1.3rem;
       }
     }
   </style>
+  
+  <!-- Load non-critical fonts asynchronously -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
+  </noscript>
 </head>
 <body>
   <div class="login-container">
@@ -97,31 +115,35 @@
     <form id="login-form">
       <div class="form-group">
         <label for="username">Username</label>
-        <input type="text" id="username" placeholder="Enter username" required />
+        <input type="text" id="username" placeholder="Enter username" required>
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter password" required />
+        <input type="password" id="password" placeholder="Enter password" required>
       </div>
       <button type="submit" class="login-btn">Login</button>
       <div class="error-message" id="error-message">Invalid credentials. Please try again.</div>
     </form>
   </div>
 
+  <!-- Defer non-critical JavaScript -->
   <script>
-    const form = document.getElementById("login-form");
-    const errorMsg = document.getElementById("error-message");
-
-    form.addEventListener("submit", function(e) {
+    document.getElementById("login-form").addEventListener("submit", function(e) {
       e.preventDefault();
       const username = document.getElementById("username").value.trim();
       const password = document.getElementById("password").value.trim();
-
+      const errorMsg = document.getElementById("error-message");
+      
       if (username === "Tradelinesadmin" && password === "Tradelinespass") {
-        window.location.href = "admin-dashboard.html"; // Redirect to dashboard
+        window.location.href = "admin-dashboard.html";
       } else {
         errorMsg.style.display = "block";
       }
+    });
+    
+    // Apply Poppins font when loaded
+    document.fonts.ready.then(function() {
+      document.documentElement.style.setProperty('--font-loaded', 'Poppins, -apple-system, BlinkMacSystemFont, sans-serif');
     });
   </script>
 </body>
