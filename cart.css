@@ -240,3 +240,47 @@
         justify-self: start;
     }
 }
+
+/* Download Cart Button Styles */
+.download-cart {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin-left: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.download-cart i {
+    margin-right: 8px;
+}
+
+.download-cart:hover {
+    background-color: #45a049;
+    transform: translateY(-1px);
+}
+
+.download-cart:active {
+    transform: translateY(0);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .cart-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .download-cart,
+    .clear-cart {
+        margin-left: 0;
+        width: 100%;
+    }
+}
