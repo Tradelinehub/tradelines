@@ -35,6 +35,19 @@
             color: white;
             font-size: 3rem;
         }
+        .bitcoin-address {
+            font-family: monospace;
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            word-break: break-all;
+            margin: 10px 0;
+        }
+        .bitcoin-qr {
+            max-width: 200px;
+            margin: 10px auto;
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -122,6 +135,9 @@
                                 <button type="button" class="payment-tab" data-method="bank">
                                     <i class="fas fa-university"></i> Bank Transfer
                                 </button>
+                                <button type="button" class="payment-tab" data-method="bitcoin">
+                                    <i class="fab fa-bitcoin"></i> Bitcoin
+                                </button>
                             </div>
 
                             <!-- Card Payment -->
@@ -189,6 +205,32 @@
                                     <p class="bank-note">
                                         <i class="fas fa-info-circle"></i> 
                                         Please include your order number as payment reference
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <!-- Bitcoin Payment -->
+                            <div class="payment-content" id="bitcoin-payment">
+                                <div class="bitcoin-info">
+                                    <h4><i class="fab fa-bitcoin"></i> Bitcoin Payment Details</h4>
+                                    <p>Please send the exact amount of Bitcoin to the following address:</p>
+                                    
+                                    <div class="bitcoin-address">
+                                        bc1q59l27vkrt52ksanagv3a0h5n2s5h4m7jvfas8m
+                                    </div>
+                                    
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=bitcoin:bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh" 
+                                         alt="Bitcoin QR Code" class="bitcoin-qr">
+                                    
+                                    <div class="bitcoin-amount">
+                                        <p><strong>Amount:</strong> <span id="bitcoin-amount">0.00000042 BTC</span></p>
+                                        <p><small>(Amount will be calculated after order confirmation)</small></p>
+                                    </div>
+                                    
+                                    <p class="bitcoin-note">
+                                        <i class="fas fa-info-circle"></i> 
+                                        Your order will be processed after 3 network confirmations. 
+                                        Please allow 10-30 minutes for the transaction to complete.
                                     </p>
                                 </div>
                             </div>
@@ -314,6 +356,33 @@
         document.querySelector('.menu-toggle').addEventListener('click', function() {
             document.querySelector('.main-nav').classList.toggle('active');
         });
+        
+        // You'll need to add this to your checkout.js to handle the Bitcoin payment tab
+        // Add this to your existing tab switching code
+        /*
+        document.querySelectorAll('.payment-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs and content
+                document.querySelectorAll('.payment-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.payment-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                this.classList.add('active');
+                const method = this.getAttribute('data-method');
+                document.getElementById(`${method}-payment`).classList.add('active');
+                
+                // If Bitcoin is selected, calculate the BTC amount
+                if (method === 'bitcoin') {
+                    const total = parseFloat(document.getElementById('summary-total').textContent.replace('$', ''));
+                    // You would typically call an API to get the current BTC exchange rate
+                    // For demonstration, we'll use a fixed rate
+                    const btcRate = 50000; // This should be fetched from an API
+                    const btcAmount = total / btcRate;
+                    document.getElementById('bitcoin-amount').textContent = btcAmount.toFixed(8) + ' BTC';
+                }
+            });
+        });
+        */
     </script>
 </body>
 </html>
