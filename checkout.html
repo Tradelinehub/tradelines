@@ -9,224 +9,46 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* Base styles */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-        
-        body {
-            background-color: #f5f5f5;
-            color: #333;
-            line-height: 1.6;
-        }
-        
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        /* Header styles */
-        .header {
-            background-color: #fff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 15px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .logo h1 {
-            color: #2c3e50;
-            font-size: 24px;
-        }
-        
-        /* Checkout page styles */
-        .checkout-page {
-            padding: 40px 0;
-        }
-        
-        .checkout-header {
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        .checkout-header h1 {
-            font-size: 28px;
-            color: #2c3e50;
-        }
-        
-        .checkout-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
-        }
-        
-        @media (min-width: 992px) {
-            .checkout-grid {
-                grid-template-columns: 2fr 1fr;
-            }
-        }
-        
-        /* Form styles */
-        .checkout-form {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .checkout-section {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .checkout-section h3 {
+        .checkout-error {
+            color: #dc3545;
+            padding: 10px;
             margin-bottom: 20px;
-            color: #2c3e50;
-            font-size: 18px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-        
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
+            border: 1px solid #dc3545;
             border-radius: 4px;
-            font-size: 16px;
-        }
-        
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-        
-        @media (min-width: 768px) {
-            .form-row {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        
-        /* Payment methods */
-        .payment-tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .payment-tab {
-            flex: 1;
-            min-width: 120px;
-            padding: 12px;
-            background-color: #f5f5f5;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            text-align: center;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-        
-        .payment-tab.active {
-            background-color: #2c3e50;
-            color: white;
-        }
-        
-        .payment-content {
+            background-color: #f8d7da;
             display: none;
         }
-        
-        .payment-content.active {
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        .loading-spinner {
+            color: white;
+            font-size: 3rem;
+        }
+        .bitcoin-address {
+            font-family: monospace;
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            word-break: break-all;
+            margin: 10px 0;
+        }
+        .bitcoin-qr {
+            max-width: 200px;
+            margin: 10px auto;
             display: block;
         }
-        
-        .card-input {
-            position: relative;
-        }
-        
-        .card-icons {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            gap: 5px;
-        }
-        
-        /* Order summary */
-        .order-summary {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            align-self: start;
-        }
-        
-        .summary-items {
-            margin-bottom: 20px;
-        }
-        
-        .summary-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-        
-        .summary-totals {
-            margin: 25px 0;
-            padding: 20px 0;
-            border-top: 1px solid #eee;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .total-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        
-        .grand-total {
-            font-weight: bold;
-            font-size: 18px;
-        }
-        
-        /* Buttons */
-        .btn-submit {
-            width: 100%;
-            padding: 15px;
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .btn-submit:hover {
-            background-color: #2ecc71;
-        }
-        
-        /* Payment Error Modal */
+        /* Payment Error Modal Styles */
         .payment-error-modal {
             position: fixed;
             top: 0;
@@ -239,7 +61,6 @@
             align-items: center;
             z-index: 2000;
         }
-        
         .payment-error-box {
             background: white;
             padding: 30px;
@@ -249,25 +70,21 @@
             text-align: center;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
-        
         .payment-error-icon {
             color: #dc3545;
             font-size: 50px;
             margin-bottom: 20px;
         }
-        
         .payment-error-title {
             color: #dc3545;
             font-size: 24px;
             margin-bottom: 15px;
         }
-        
         .payment-error-message {
             margin-bottom: 25px;
             font-size: 16px;
             line-height: 1.5;
         }
-        
         .payment-error-btn {
             background: #dc3545;
             color: white;
@@ -278,34 +95,8 @@
             cursor: pointer;
             transition: background 0.3s;
         }
-        
         .payment-error-btn:hover {
             background: #c82333;
-        }
-        
-        /* Loading Overlay */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        
-        .loading-spinner {
-            color: white;
-            font-size: 3rem;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -336,11 +127,11 @@
             <button class="menu-toggle">☰</button>
         </div>
     </header>
-<body>
+
     <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-overlay">
         <div class="loading-spinner">
-            <i class="fas fa-spinner"></i>
+            <i class="fas fa-spinner fa-spin"></i>
         </div>
     </div>
 
@@ -351,8 +142,8 @@
                 <i class="fas fa-exclamation-circle"></i>
             </div>
             <h3 class="payment-error-title">Payment Error</h3>
-            <p class="payment-error-message">Error: The payment isn't complete, please try again.</p>
-            <button class="payment-error-btn" id="tryAgainBtn">Try Again</button>
+            <p class="payment-error-message">Error: The payment isn't complete, please try again. It should have processed already.</p>
+            <button class="payment-error-btn" onclick="hidePaymentError()">Try Again</button>
         </div>
     </div>
 
@@ -363,10 +154,12 @@
                 <h1><i class="fas fa-shopping-cart"></i> Checkout</h1>
             </div>
 
+            <div id="checkout-error" class="checkout-error"></div>
+
             <div class="checkout-grid">
                 <!-- Checkout Form Section -->
                 <section class="checkout-form">
-                    <form id="payment-form">
+                    <form id="payment-form" novalidate>
                         <!-- Customer Information -->
                         <div class="checkout-section">
                             <h3><i class="fas fa-user"></i> Customer Information</h3>
@@ -396,13 +189,13 @@
                             
                             <div class="payment-tabs">
                                 <button type="button" class="payment-tab active" data-method="card">
-                                    <i class="fas fa-credit-card"></i> Card
+                                    <i class="fas fa-credit-card"></i> Credit/Debit Card
                                 </button>
                                 <button type="button" class="payment-tab" data-method="paypal">
                                     <i class="fab fa-paypal"></i> PayPal
                                 </button>
                                 <button type="button" class="payment-tab" data-method="bank">
-                                    <i class="fas fa-university"></i> Bank
+                                    <i class="fas fa-university"></i> Bank Transfer
                                 </button>
                                 <button type="button" class="payment-tab" data-method="bitcoin">
                                     <i class="fab fa-bitcoin"></i> Bitcoin
@@ -419,6 +212,7 @@
                                             <i class="fab fa-cc-visa"></i>
                                             <i class="fab fa-cc-mastercard"></i>
                                             <i class="fab fa-cc-amex"></i>
+                                            <i class="fab fa-cc-discover"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -440,27 +234,66 @@
 
                             <!-- PayPal Payment -->
                             <div class="payment-content" id="paypal-payment">
-                                <div class="form-group">
-                                    <p>You will be redirected to PayPal to complete your payment</p>
+                                <div class="paypal-container">
+                                    <div id="paypal-button-container"></div>
+                                    <p class="paypal-note">
+                                        <i class="fas fa-lock"></i> You'll be redirected to PayPal to complete your payment
+                                    </p>
                                 </div>
                             </div>
 
                             <!-- Bank Transfer -->
                             <div class="payment-content" id="bank-payment">
-                                <div class="form-group">
-                                    <label>Bank Account Details</label>
-                                    <p>Account Name: TRADELINES INC.</p>
-                                    <p>Account Number: 1234567890</p>
-                                    <p>Routing Number: 021000021</p>
+                                <div class="bank-info">
+                                    <h4><i class="fas fa-university"></i> Bank Transfer Details</h4>
+                                    <div class="bank-details">
+                                        <div class="detail-row">
+                                            <span>Bank Name:</span>
+                                            <strong>Chase Bank</strong>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span>Account Name:</span>
+                                            <strong>Tradelines Inc.</strong>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span>Account Number:</span>
+                                            <strong>1234567890</strong>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span>Routing Number:</span>
+                                            <strong>021000021</strong>
+                                        </div>
+                                    </div>
+                                    <p class="bank-note">
+                                        <i class="fas fa-info-circle"></i> 
+                                        Please include your order number as payment reference
+                                    </p>
                                 </div>
                             </div>
                             
                             <!-- Bitcoin Payment -->
                             <div class="payment-content" id="bitcoin-payment">
-                                <div class="form-group">
-                                    <label>Bitcoin Address</label>
-                                    <p>bc1q59l27vkrt52ksanagv3a0h5n2s5h4m7jvfas8m</p>
-                                    <p>Amount: 0.00000042 BTC</p>
+                                <div class="bitcoin-info">
+                                    <h4><i class="fab fa-bitcoin"></i> Bitcoin Payment Details</h4>
+                                    <p>Please send the exact amount of Bitcoin to the following address:</p>
+                                    
+                                    <div class="bitcoin-address">
+                                        bc1q59l27vkrt52ksanagv3a0h5n2s5h4m7jvfas8m
+                                    </div>
+                                    
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=bitcoin:bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh" 
+                                         alt="Bitcoin QR Code" class="bitcoin-qr">
+                                    
+                                    <div class="bitcoin-amount">
+                                        <p><strong>Amount:</strong> <span id="bitcoin-amount">0.00000042 BTC</span></p>
+                                        <p><small>(Amount will be calculated after order confirmation)</small></p>
+                                    </div>
+                                    
+                                    <p class="bitcoin-note">
+                                        <i class="fas fa-info-circle"></i> 
+                                        Your order will be processed after 3 network confirmations. 
+                                        Please allow 10-30 minutes for the transaction to complete.
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -478,31 +311,50 @@
                                     <input type="text" id="city" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="state">State *</label>
+                                    <label for="state">State/Province *</label>
                                     <select id="state" required>
                                         <option value="">Select State</option>
+                                        <option value="IL">Illinois</option>
                                         <option value="CA">California</option>
-                                        <option value="NY">New York</option>
+                                        <!-- States would be populated here -->
                                     </select>
                                 </div>
-                            </div>
-                            <div class="form-row">
                                 <div class="form-group">
-                                    <label for="zip">ZIP Code *</label>
+                                    <label for="zip">ZIP/Postal Code *</label>
                                     <input type="text" id="zip" required>
                                 </div>
-                                <div class="form-group">
-                                    <label for="country">Country *</label>
-                                    <select id="country" required>
-                                        <option value="US">United States</option>
-                                        <option value="CA">Canada</option>
-                                    </select>
-                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="country">Country *</label>
+                                <select id="country" required>
+                                    <option value="US">United States</option>
+                                    <option value="CA">Canada</option>
+                                    <!-- More countries would be added here -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Order Notes -->
+                        <div class="checkout-section">
+                            <h3><i class="fas fa-edit"></i> Order Notes (Optional)</h3>
+                            <div class="form-group">
+                                <textarea id="notes" placeholder="Special instructions for your order..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Terms and Conditions -->
+                        <div class="checkout-section terms">
+                            <div class="form-group checkbox">
+                                <input type="checkbox" id="terms" required>
+                                <label for="terms">
+                                    I agree to the <a href="#" target="_blank">Terms of Service</a> and 
+                                    <a href="#" target="_blank">Privacy Policy</a> *
+                                </label>
                             </div>
                         </div>
 
                         <!-- Submit Button -->
-                        <button type="submit" class="btn-submit" id="place-order">
+                        <button type="submit" class="btn btn-submit" id="place-order">
                             <i class="fas fa-lock"></i> Complete Purchase
                         </button>
                     </form>
@@ -511,32 +363,35 @@
                 <!-- Order Summary Section -->
                 <aside class="order-summary">
                     <h3><i class="fas fa-receipt"></i> Order Summary</h3>
-                    <div class="summary-items">
-                        <div class="summary-item">
-                            <span>Product 1</span>
-                            <span>$99.99</span>
-                        </div>
-                        <div class="summary-item">
-                            <span>Product 2</span>
-                            <span>$49.99</span>
-                        </div>
+                    <div class="summary-items" id="summary-items">
+                        <!-- Items will be populated by JavaScript -->
                     </div>
                     <div class="summary-totals">
                         <div class="total-row">
                             <span>Subtotal</span>
-                            <span>$149.98</span>
-                        </div>
-                        <div class="total-row">
-                            <span>Shipping</span>
-                            <span>FREE</span>
+                            <span id="summary-subtotal">$0.00</span>
                         </div>
                         <div class="total-row">
                             <span>Tax</span>
-                            <span>$12.00</span>
+                            <span id="summary-tax">$0.00</span>
                         </div>
                         <div class="total-row grand-total">
                             <span>Total</span>
-                            <span>$161.98</span>
+                            <span id="summary-total">$0.00</span>
+                        </div>
+                    </div>
+                    <div class="summary-guarantee">
+                        <div class="guarantee-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>100% Secure Payment</span>
+                        </div>
+                        <div class="guarantee-item">
+                            <i class="fas fa-lock"></i>
+                            <span>256-bit Encryption</span>
+                        </div>
+                        <div class="guarantee-item">
+                            <i class="fas fa-user-shield"></i>
+                            <span>Privacy Protected</span>
                         </div>
                     </div>
                 </aside>
@@ -544,55 +399,87 @@
         </div>
     </main>
 
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2023 TRADELINES. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Refund Policy</a>
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="cart-functions.js"></script>
+    <script src="checkout.js"></script>
     <script>
-        // Payment method switching
-        document.querySelectorAll('.payment-tab').forEach(tab => {
+    // Menu toggle functionality
+    document.querySelector('.menu-toggle').addEventListener('click', function() {
+        document.querySelector('.main-nav').classList.toggle('active');
+    });
+
+    // Payment error modal functions
+    function showPaymentError() {
+        document.getElementById('paymentErrorModal').style.display = 'flex';
+        // Update the message to your requested text
+        document.querySelector('.payment-error-message').textContent = 
+            "Error occurred, payment cannot be completed, please try again later";
+    }
+
+    function hidePaymentError() {
+        document.getElementById('paymentErrorModal').style.display = 'none';
+    }
+
+    // Handle form submission - FIXED VERSION
+    document.getElementById('payment-form').addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+        
+        // Show loading overlay
+        document.querySelector('.loading-overlay').style.display = 'flex';
+        
+        // Get form data
+        const formData = {
+            email: document.getElementById('email').value,
+            firstName: document.getElementById('first-name').value,
+            lastName: document.getElementById('last-name').value,
+            phone: document.getElementById('phone').value,
+            // Add other form fields as needed
+        };
+        
+        console.log('Form submitted with data:', formData);
+        
+        // Here you would normally send the data to your server
+        // For now, we'll simulate a payment processing
+        setTimeout(function() {
+            // Hide loading overlay
+            document.querySelector('.loading-overlay').style.display = 'none';
+            
+            // Show payment error modal with your custom message
+            showPaymentError();
+            
+            console.log('Showing error modal as requested');
+        }, 1000); // 1 second delay to simulate processing
+    });
+
+    // Make sure the DOM is fully loaded before attaching event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        // Payment method tabs functionality
+        const paymentTabs = document.querySelectorAll('.payment-tab');
+        paymentTabs.forEach(tab => {
             tab.addEventListener('click', function() {
                 // Remove active class from all tabs and content
-                document.querySelectorAll('.payment-tab').forEach(t => {
-                    t.classList.remove('active');
-                });
-                document.querySelectorAll('.payment-content').forEach(c => {
-                    c.classList.remove('active');
-                });
+                paymentTabs.forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.payment-content').forEach(c => c.classList.remove('active'));
                 
-                // Add active class to clicked tab
+                // Add active class to clicked tab and corresponding content
                 this.classList.add('active');
-                
-                // Show corresponding content
                 const method = this.getAttribute('data-method');
                 document.getElementById(`${method}-payment`).classList.add('active');
             });
         });
-
-        // Form submission
-        document.getElementById('payment-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Show loading overlay
-            document.getElementById('loadingOverlay').style.display = 'flex';
-            
-            // Simulate payment processing
-            setTimeout(function() {
-                // Hide loading overlay
-                document.getElementById('loadingOverlay').style.display = 'none';
-                
-                // Show error modal
-                document.getElementById('paymentErrorModal').style.display = 'flex';
-            }, 2000);
-        });
-
-        // Try Again button
-        document.getElementById('tryAgainBtn').addEventListener('click', function() {
-            document.getElementById('paymentErrorModal').style.display = 'none';
-        });
-
-        // Close modal when clicking outside
-        document.getElementById('paymentErrorModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.style.display = 'none';
-            }
-        });
-    </script>
+    });
+</script>
 </body>
 </html>
